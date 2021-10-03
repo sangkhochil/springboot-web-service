@@ -5,10 +5,11 @@ import java.util.Date;
 import java.util.List;
 
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
 
 import com.sangkhochil.rest.webervices.restfulwebservice.model.User;
 
-@Component
+@Repository
 public class UserDaoService {
 	private static List<User> list = new ArrayList<>();
 	private static int countUser = 3;
@@ -30,6 +31,6 @@ public class UserDaoService {
 	}
 	
 	public User findOne(int id) {
-		return list.stream().filter(l -> l.getId() == id).findFirst().get();
+		return list.stream().filter(l -> l.getId() == id).findFirst().orElse(null);
 	}
 }
