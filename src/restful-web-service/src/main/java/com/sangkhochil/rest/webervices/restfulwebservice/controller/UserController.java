@@ -6,6 +6,10 @@ import java.util.List;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.EntityModel;
+import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
+
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.*;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -31,11 +35,17 @@ public class UserController {
 	}
 
 	@GetMapping(path = "/users/{id}")
-	public User retriveUser(@PathVariable int id) {
+	public EntityModel<User> retriveUser(@PathVariable int id) {
 		User user = service.findOne(id);
 		if(user == null)
 			throw new UserNotFoundException("id->"+id);
-		return user;
+		
+		EntityModel<User> modal = EntityModel.of(user);
+//		WebMvcLinkBuilder linktoUsers = WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(this.getClass()).retriveAllUsers()); // without static import
+		WebMvcLinkBuilder linktoUsers = linkTo(methodOn(this.getClass()).retriveAllUsers()); // with static import, static import, import all static methods of class. can call all static method without name of classname
+		modal.add(linktoUsers.withRel("all-users"));
+		
+		return modal;
 	}
 
 	@PostMapping(path = "/users")
