@@ -2,8 +2,11 @@ package com.sangkhochil.rest.webervices.restfulwebservice.controller.customexcep
 
 import java.util.Date;
 
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.HttpRequestMethodNotSupportedException;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestController;
@@ -24,5 +27,13 @@ public class CustomizedResponseEntityExceptionHandler extends ResponseEntityExce
 	public final ResponseEntity<Object> handleUserNotFoundException(Exception ex, WebRequest request) throws Exception {
 		ExceptionReponse exception = new ExceptionReponse(new Date(), ex.getMessage(), request.getDescription(false));
 		return new ResponseEntity(exception, HttpStatus.NOT_FOUND);
+	}
+	
+	@Override
+	protected ResponseEntity<Object> handleMethodArgumentNotValid(
+			MethodArgumentNotValidException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
+		
+		ExceptionReponse exception = new ExceptionReponse(new Date(), "Validate failed.", ex.getBindingResult().toString());
+		return new ResponseEntity(exception, HttpStatus.BAD_REQUEST);
 	}
 }
