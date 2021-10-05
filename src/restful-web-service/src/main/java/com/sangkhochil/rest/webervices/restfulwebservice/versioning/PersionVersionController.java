@@ -20,7 +20,7 @@ public class PersionVersionController {
 	}
 	
 	//
-	//URI param versioning
+	//Request param versioning
 	//
 	@GetMapping(path="/person/params", params = "version=1")
 	public PersonV1 paramV1() {
@@ -35,19 +35,21 @@ public class PersionVersionController {
 	//
 	//header versioning
 	//
-	@GetMapping(path="/person/headers", headers = "X_VERSION=1")
-	public PersonV1 headerV1() {
-		return new PersonV1("Charlie Chaplen");
-	}
 	
-	@GetMapping(path="/person/headers", headers = "X_VERSION=2")
-	public PersonV2 headerV2() {
-		return new PersonV2(new Name("Charlie", "Chaplen"));
-	}
+	//getting problem when creating swagger doc
+//	@GetMapping(path="/person/headers", headers = "X-VERSION=1")
+//	public PersonV1 headerV1() {
+//		return new PersonV1("Charlie Chaplen");
+//	}
+//	
+//	@GetMapping(path="/person/headers", headers = "X-VERSION=2")
+//	public PersonV2 headerV2() {
+//		return new PersonV2(new Name("Charlie", "Chaplen"));
+//	}
 	
-	//
-	//header accept versioning
-	//
+//	//
+//	//producer header accept versioning or media type versioning (a.k.a "content negotiation" or "accept header")
+//	//
 	@GetMapping(path="/person/producers", produces = "application/com.sangkhochil.app-v1+json")
 	public PersonV1 producerV1() {
 		return new PersonV1("Charlie Chaplen");
