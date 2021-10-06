@@ -9,10 +9,13 @@ import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.sangkhochil.rest.webervices.restfulwebservice.common.Utils;
 import com.sangkhochil.rest.webervices.restfulwebservice.model.HelloWorldBean;
+
+import io.micrometer.core.ipc.http.HttpSender.Request;
 
 @RestController
 public class HelloWorldController {
@@ -48,5 +51,15 @@ public class HelloWorldController {
 		
 		//return messageSource.getMessage(Utils.GOOD_MORNING_MESSAGE, null, "Default Message", locale);
 		return messageSource.getMessage(Utils.GOOD_MORNING_MESSAGE, null, LocaleContextHolder.getLocale()); // if client not select Accept-Language, server return default english message
+	}
+	
+	@GetMapping(path = "/hello-world-request-params")
+	public String helloWorldRequestParam(@RequestParam(value = "name", defaultValue = "default value") String name) {
+		return name;
+	}
+	
+	@GetMapping(path = "/hello-world-request-params-1", params = "check1=1")
+	public String helloWorldRequestParam_1() {
+		return "helloWorldRequestParam_1";
 	}
 }
